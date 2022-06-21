@@ -23,6 +23,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 
 项目目录结构的设计
+``` js
 
 ├─build
 ├─config
@@ -36,6 +37,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 │  └─components---组件资源
 │      └─header
 └─static
+```
 
 前后端分离方式,   前后端各司其职,   各自开发,    联调
 
@@ -44,7 +46,7 @@ SPA中(单页应用中),   前后端联调,
 前端需要一些Mock(假数据), 模拟服务端请求
 
 =====
-Map映射变量类型
+技巧1: Map映射变量类型
 ``` vue
 
 
