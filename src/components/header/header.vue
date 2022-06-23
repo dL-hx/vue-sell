@@ -39,8 +39,10 @@
     <div v-show="detailShow" class="detail">
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
-          <div class="bulletin">
-            <!-- <p class="content">{{ seller.bulletin }}</p> -->
+          <h1 class="name">{{ seller.name }}</h1>
+          <!-- 定义wrapper, 包装组件 -->
+          <div class="star-wrapper">
+             <v-star :size="48" :score="seller.score"/>
           </div>
         </div>
       </div>
@@ -53,15 +55,26 @@
 </template> 
 
 <script>
+import Star from './../star/star.vue'
+
+
+
 export default {
   props: {
     seller: {
       type: Object
     }
   },
+
+  components: {
+    'v-star': Star
+  },
+
+
   data() {
     return {
-      detailShow: false // 默认是不展示
+      // detailShow: false // 默认是不展示
+      detailShow: true // 默认是不展示
     }
   },
   created() {// 转换为对应的样式
@@ -255,6 +268,25 @@ export default {
     background: rgba(7, 17, 27, 0.8);
     backdrop-filter: blur(10px);
 
+
+    .detail-wrapper {
+      width: 100%;
+      margin-top: 64px;
+      padding-bottom: 64px;
+
+      .name {
+        line-height: 16px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .star-wrapper{
+        text-align: center;/*水平居中*/
+        padding: 2px 0;
+        margin-top: 18px;
+      }
+    }
   }
 
   .detail-close {

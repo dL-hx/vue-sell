@@ -13,10 +13,10 @@
 
 // 引入mix-in 2x图片
 // 所有图片正常情况下展示 2x图片, 
-.bg-image(@url:''){
+.bg-image(@url:'', @base:"../../../resource/"){
     @2xImgUrl: "@2x.png";
 	// call mixin .c-icon();
-    background-image: url("../../../resource/@{url}@{2xImgUrl}");
+    background-image: url("@{base}@{url}@{2xImgUrl}");
 };
 
 
@@ -27,3 +27,9 @@
         background-image: url("@{url}@{3xImgUrl}");
     }
 }
+
+
+
+
+
+
