@@ -36,20 +36,51 @@
       <i class="icon-keyboard_arrow_right"></i>
     </div>
 
-    <div v-show="detailShow" class="detail">
-      <div class="detail-wrapper clearfix">
-        <div class="detail-main">
-          <h1 class="name">{{ seller.name }}</h1>
-          <!-- 定义wrapper, 包装组件 -->
-          <div class="star-wrapper">
-             <v-star :size="48" :score="seller.score"/>
+    <transition name="fade">
+      <div v-show="detailShow" class="detail" transition="">
+        <div class="detail-wrapper clearfix">
+          <div class="detail-main">
+            <h1 class="name">{{ seller.name }}</h1>
+            <!-- 定义wrapper, 包装组件 -->
+            <div class="star-wrapper">
+              <v-star :size="48" :score="seller.score" />
+            </div>
+
+            <div class="title-wrapper">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+
+            <ul v-if="seller.supports" class="supports">
+              <li class="support-item" v-for="(item, index)  in seller.supports" :key="index">
+                <span class="icon" :class="classMap[seller.supports[index].type]"></span>
+                <span class="text">{{ item.description }}</span>
+              </li>
+            </ul>
+
+
+            <div class="title-wrapper">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+
+            <div class="bulletin">
+              <!-- 大段文字, p -->
+              <p class="content">{{ seller.bulletin }}</p>
+            </div>
+
+
           </div>
         </div>
+        <div class="detail-close" @click="hideDetail">
+          <i class="icon-close"></i>
+        </div>
       </div>
-      <div class="detail-close">
-        <!-- <i class="icon-close"></i> -->
-      </div>
-    </div>
+    </transition>
+
+
 
   </div>
 </template> 
@@ -73,8 +104,7 @@ export default {
 
   data() {
     return {
-      // detailShow: false // 默认是不展示
-      detailShow: true // 默认是不展示
+      detailShow: false // 默认是不展示
     }
   },
   created() {// 转换为对应的样式
@@ -87,6 +117,11 @@ export default {
     // 展示弹窗
     showDetail() {
       this.detailShow = true
+    },
+
+    // 隐藏弹窗
+    hideDetail() {
+      this.detailShow = false
     }
   }
 
@@ -257,6 +292,8 @@ export default {
     /* 不能用hidden 因为如果一旦超过的部分就会被隐藏了 */
     background: rgba(7, 17, 27, 0.8);
 
+    // 设置模糊属性, 实现渐进增强效果, ios设备支持
+    backdrop-filter: blur(10px);
     // 设置top, left
     top: 0;
     left: 0;
@@ -281,19 +318,139 @@ export default {
         font-weight: 700;
       }
 
-      .star-wrapper{
-        text-align: center;/*水平居中*/
+      .star-wrapper {
+        text-align: center;
+        /*水平居中*/
         padding: 2px 0;
         margin-top: 18px;
       }
+
+      .title-wrapper {
+        display: flex;
+        /*1. 设置宽度*/
+        width: 80%;
+        margin: 28px auto 24px auto;
+
+        .line {
+          flex: 1;
+          /*2. 设置自适应,所占空间大小,配合父级flex*/
+          /*3.向上偏移-6px, 结合relative*/
+          position: relative;
+          top: -6px;
+          /*4.设置细线粗细,  border-bottom*/
+          border-bottom: 1px solid rgba(255, 255, 255, .2);
+
+        }
+
+        .text {
+          /*4.设置文本,fz, fw*/
+          padding: 0 12px;
+          font-size: 14px;
+          font-weight: 700;
+          /*文案加粗 */
+        }
+      }
+
+
+      .supports {
+        // 1. 水平居中
+        width: 80%;
+        margin: 0 auto;
+
+        .support-item {
+          padding: 0 12px;
+          margin-bottom: 12px;
+          font-size: 0;
+
+          &:last-child {
+            /*2. 最后一个盒子距离*/
+            margin-bottom: 0;
+          }
+
+          .icon {
+            /*3. 设置icon图片大小*/
+
+            /*3.1. 设置盒子的大小*/
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            vertical-align: top;
+
+            margin-right: 6px;
+            /*3.2 */
+            background-size: 16px 16px;
+            background-repeat: no-repeat;
+
+            &.decrease {
+              .bg-image('decrease_2');
+            }
+
+            &.discount {
+              .bg-image('discount_2');
+
+            }
+
+            &.guarantee {
+              .bg-image('guarantee_2');
+            }
+
+            &.invoice {
+              .bg-image('invoice_2');
+            }
+
+            &.special {
+              .bg-image('special_2');
+            }
+
+          }
+
+          .text {
+            line-height: 12px;
+            font-size: 12px;
+          }
+        }
+      }
+
+
+      .bulletin {
+        width: 80%;
+        margin: 0 auto;
+
+        .content {
+          padding: 0 12px;
+          line-height: 24px;
+          font-size: 12px;
+        }
+      }
+
+
+
     }
   }
+
+
+  .fade-enter-active {
+    transition: all .5s;
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    opacity: 1;
+    background-color: rgba(7, 17, 27, 0.8);
+  }
+
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+    background-color: rgba(7, 17, 27, 0);
+  }
+
 
   .detail-close {
     position: relative;
     width: 32px;
     height: 32px;
-    margin: -64px auto 0 auto;
+    margin: -48px auto 0 auto;
     clear: both;
     font-size: 32px;
   }
